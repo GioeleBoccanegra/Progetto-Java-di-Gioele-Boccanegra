@@ -1,6 +1,7 @@
 package org.javabasics;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.javabasics.utenti.repositoryUtente.RepositoryUtente;
 import org.javabasics.obbiettivi.controllerObbiettivi.ControllerObbiettivi;
@@ -16,23 +17,23 @@ public class Application {
 
   public static void main(String[] args) {
 
-    ArrayList<Utente> utenti = new ArrayList<Utente>();
-    ArrayList<Prenotazione> prenotazioni = new ArrayList<Prenotazione>();
-    ArrayList<Obbiettivo> obbiettivi = new ArrayList<Obbiettivo>();
+    Map<Integer, Prenotazione> prenotazioniMap = new HashMap<>();
+    Map<Integer, Obbiettivo> obbiettiviMap = new HashMap<>();
+    Map<Integer, Utente> utentiMap = new HashMap<>();
 
     System.out.println("-------------------------------------------------------------------------");
 
-    utenti = RepositoryUtente.estraiDatiUtente();
-    ControllerUtente.stampaUtenti(utenti);
+    utentiMap = RepositoryUtente.estraiDatiUtente();
+    ControllerUtente.stampaUtenti(utentiMap);
 
     System.out.println("-------------------------------------------------------------------------");
 
-    obbiettivi = RepositoryObbiettivi.estraiDatiObbiettivos();
-    ControllerObbiettivi.stampaObbiettivi(obbiettivi);
+    obbiettiviMap = RepositoryObbiettivi.estraiDatiObbiettivos();
+    ControllerObbiettivi.stampaObbiettivi(obbiettiviMap);
     System.out.println("-------------------------------------------------------------------------");
 
-    prenotazioni = repositoryPrenotazioni.estraiDatiPrenotazioni();
-    ControllerPrenotazioni.stampaPrenotazioni(prenotazioni);
+    prenotazioniMap = repositoryPrenotazioni.estraiDatiPrenotazioni();
+    ControllerPrenotazioni.stampaPrenotazioni(prenotazioniMap);
     System.out.println("-------------------------------------------------------------------------");
   }
 }

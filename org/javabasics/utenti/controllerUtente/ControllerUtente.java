@@ -1,13 +1,14 @@
 package org.javabasics.utenti.controllerUtente;
 
 import org.javabasics.utenti.modelUtente.*;
-import java.util.ArrayList;
+
+import java.util.Map;
 
 public class ControllerUtente {
 
-  public static void stampaUtenti(ArrayList<Utente> utenti) {
-    for (Utente u : utenti) {
-      System.out.println(u.toString());
+  public static void stampaUtenti(Map<Integer, Utente> utenti) {
+    for (Utente o : utenti.values()) {
+      System.out.println(o.toString());
     }
   }
 }

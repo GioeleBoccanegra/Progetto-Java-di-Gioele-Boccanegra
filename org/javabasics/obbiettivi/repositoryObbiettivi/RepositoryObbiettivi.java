@@ -2,48 +2,47 @@ package org.javabasics.obbiettivi.repositoryObbiettivi;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.javabasics.obbiettivi.modelObbiettivi.Obbiettivo;
 
 public class RepositoryObbiettivi {
-  public static ArrayList<Obbiettivo> estraiDatiObbiettivos() {
+  public static Map<Integer, Obbiettivo> estraiDatiObbiettivos() {
     File fileObbiettivi = new File(
         "C:/Users/39328/Desktop/tutto/start_to_impact/8java/MeditActive/org/javabasics/dati/obiettivi.csv");
-    ArrayList<Obbiettivo> obbiettivi = new ArrayList<Obbiettivo>();
-    if (fileObbiettivi.exists()) {
-      try {
-        BufferedReader br = new BufferedReader(new FileReader(fileObbiettivi));
+    
+    Map<Integer, Obbiettivo> obbiettiviMap = new HashMap<>();
 
+    if (fileObbiettivi.exists()) {
+      try (BufferedReader br = new BufferedReader(new FileReader(fileObbiettivi))) {
         String linea;
-        linea = br.readLine();
+        linea = br.readLine(); // salta intestazione
 
         while ((linea = br.readLine()) != null) {
-
           String[] datiObbiettivo = linea.split(";");
           Integer id = Integer.parseInt(datiObbiettivo[0]);
+          String nome = datiObbiettivo[1];
+          String descrizione = datiObbiettivo[2];
+          String tipologia = datiObbiettivo[3];
           Integer durata = Integer.parseInt(datiObbiettivo[4]);
+          String disponibile = datiObbiettivo[5];
 
-          Obbiettivo obbiettivo = new Obbiettivo(id, datiObbiettivo[1], datiObbiettivo[2], datiObbiettivo[3], durata,
-              datiObbiettivo[5]);
-
-          obbiettivi.add(obbiettivo);
+          Obbiettivo obbiettivo = new Obbiettivo(id, nome, descrizione, tipologia, durata, disponibile);
+          obbiettiviMap.put(id, obbiettivo);
         }
 
-        br.close();
-
-      } catch (FileNotFoundException e) {
-        System.out.println("errore nella lettura del file: " + e.getMessage());
       } catch (IOException e) {
-        System.out.println("errore nella lettura del file: " + e.getMessage());
+        System.out.println("Errore nella lettura del file: " + e.getMessage());
+        e.printStackTrace();
       }
 
     } else {
-      System.out.println("il file non esiste");
+      System.out.println("Il file obiettivi.csv non esiste");
     }
-    return obbiettivi;
+
+    return obbiettiviMap;
   }
 }

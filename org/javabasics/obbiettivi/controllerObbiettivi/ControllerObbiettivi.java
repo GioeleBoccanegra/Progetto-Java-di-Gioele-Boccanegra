@@ -1,13 +1,13 @@
 package org.javabasics.obbiettivi.controllerObbiettivi;
 
-import java.util.ArrayList;
+import java.util.Map;
 
 import org.javabasics.obbiettivi.modelObbiettivi.Obbiettivo;
 
 public class ControllerObbiettivi {
-  public static void stampaObbiettivi(ArrayList<Obbiettivo> obbiettivi) {
-    for (Obbiettivo u : obbiettivi) {
-      System.out.println(u.toString());
+ public static void stampaObbiettivi(Map<Integer, Obbiettivo> obbiettivi) {
+    for (Obbiettivo o : obbiettivi.values()) {
+        System.out.println(o.toString());
     }
-  }
+}
 }
