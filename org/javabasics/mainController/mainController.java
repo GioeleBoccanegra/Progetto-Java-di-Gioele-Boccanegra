@@ -1,8 +1,9 @@
 package org.javabasics.mainController;
 
 import java.util.Scanner;
+import org.javabasics.mainService.MainService;;
 
-public class mainController {
+public class MainController {
   public static void start() {
     System.out.println("Benvenuto in MEDITACTIVE");
     Scanner scan = new Scanner(System.in);
@@ -13,6 +14,8 @@ public class mainController {
       menuInConsole();
       controllaRisposta(scan);
       risposta = scan.nextInt();
+      MainService mainService = new MainService();
+      mainService.ScegliOperazione(risposta);
 
     } while (risposta != 0);
 

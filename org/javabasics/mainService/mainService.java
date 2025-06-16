@@ -1,14 +1,19 @@
 package org.javabasics.mainService;
 
-import java.util.Map;
+import org.javabasics.obbiettivi.serviceObbiettivi.ServiceObbiettivi;
 
-import org.javabasics.obbiettivi.modelObbiettivi.Obbiettivo;
-import org.javabasics.prenotazioni.modelPrenotazioni.Prenotazione;
-import org.javabasics.utenti.modelUtente.Utente;
+public class MainService {
+  public void ScegliOperazione(Integer risposta) {
 
-public class mainService {
-  protected Map<Integer, Utente> utentiMap;
-  protected Map<Integer, Obbiettivo> obbiettiviiMap;
-  protected Map<Integer, Prenotazione> prenotazioniMap;
+    switch (risposta) {
+      case 1:
 
+        ServiceObbiettivi serviceObbiettivi = ServiceObbiettivi.getInstance();
+        serviceObbiettivi.stampaObbiettivi();
+
+        break;
+
+    }
+
+  }
 }

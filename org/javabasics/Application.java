@@ -1,6 +1,6 @@
 package org.javabasics;
 
-import org.javabasics.mainController.mainController;
+import org.javabasics.mainController.MainController;
 import org.javabasics.obbiettivi.serviceObbiettivi.ServiceObbiettivi;
 import org.javabasics.prenotazioni.servicePrenotazioni.ServicePrenotazioni;
 import org.javabasics.utenti.serviceUtente.ServiceUtente;;
@@ -9,19 +9,14 @@ public class Application {
 
   public static void main(String[] args) {
 
-    ServiceUtente serviceUtente = new ServiceUtente();
+    ServiceUtente serviceUtente = ServiceUtente.getInstance();
     serviceUtente.caricaUtenti();
 
-    ServiceObbiettivi serviceObbiettivi = new ServiceObbiettivi();
+    ServiceObbiettivi serviceObbiettivi = ServiceObbiettivi.getInstance();
     serviceObbiettivi.caricaObbiettivi();
 
-    ServicePrenotazioni servicePrenotazioni = new ServicePrenotazioni();
+    ServicePrenotazioni servicePrenotazioni = ServicePrenotazioni.getInstance();
     servicePrenotazioni.caricaPrenotazioni();
-
-    serviceUtente.stampaUtenti();
-    serviceObbiettivi.stampaObbiettivi();
-    servicePrenotazioni.stampaPrenotazioni();
-
-    mainController.start();
+    MainController.start();
   }
 }

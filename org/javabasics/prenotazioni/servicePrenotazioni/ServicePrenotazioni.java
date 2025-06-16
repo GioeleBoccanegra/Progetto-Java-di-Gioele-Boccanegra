@@ -7,7 +7,21 @@ import org.javabasics.prenotazioni.modelPrenotazioni.Prenotazione;
 import org.javabasics.prenotazioni.repositoryPrenotazioni.RepositoryPrenotazioni;
 
 public class ServicePrenotazioni {
+
+  private static ServicePrenotazioni instance = null;
+
   protected Map<Integer, Prenotazione> prenotazioniMap = new HashMap<>();
+
+  private ServicePrenotazioni() {
+
+  }
+
+  public static ServicePrenotazioni getInstance() {
+    if (instance == null) {
+      instance = new ServicePrenotazioni();
+    }
+    return instance;
+  }
 
   public void caricaPrenotazioni() {
     prenotazioniMap = RepositoryPrenotazioni.estraiDatiPrenotazioni();
