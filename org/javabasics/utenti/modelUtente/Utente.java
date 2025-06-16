@@ -20,16 +20,8 @@ public class Utente {
 
   }
 
-  public String getName() {
-    return this.nome;
-  }
-
-  public String getCognome() {
-    return this.cognome;
-  }
-
-  public Date getDataNascita() {
-    return this.dataNascita;
+  public Integer getId() {
+    return id;
   }
 
   @Override

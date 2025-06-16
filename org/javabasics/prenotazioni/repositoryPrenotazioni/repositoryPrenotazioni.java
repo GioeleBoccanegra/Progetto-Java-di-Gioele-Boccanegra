@@ -12,7 +12,7 @@ import java.util.Map;
 
 import org.javabasics.prenotazioni.modelPrenotazioni.Prenotazione;
 
-public class repositoryPrenotazioni {
+public class RepositoryPrenotazioni {
 
   public static Map<Integer, Prenotazione> estraiDatiPrenotazioni() {
     File filePrenotazioni = new File(

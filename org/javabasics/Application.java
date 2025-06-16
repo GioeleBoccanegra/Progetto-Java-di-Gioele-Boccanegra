@@ -1,39 +1,27 @@
 package org.javabasics;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.javabasics.utenti.repositoryUtente.RepositoryUtente;
-import org.javabasics.obbiettivi.controllerObbiettivi.ControllerObbiettivi;
-import org.javabasics.obbiettivi.modelObbiettivi.Obbiettivo;
-import org.javabasics.obbiettivi.repositoryObbiettivi.RepositoryObbiettivi;
-import org.javabasics.prenotazioni.controllerPrenotazioni.ControllerPrenotazioni;
-import org.javabasics.prenotazioni.modelPrenotazioni.Prenotazione;
-import org.javabasics.prenotazioni.repositoryPrenotazioni.repositoryPrenotazioni;
-import org.javabasics.utenti.controllerUtente.ControllerUtente;
-import org.javabasics.utenti.modelUtente.Utente;
+import org.javabasics.mainController.mainController;
+import org.javabasics.obbiettivi.serviceObbiettivi.ServiceObbiettivi;
+import org.javabasics.prenotazioni.servicePrenotazioni.ServicePrenotazioni;
+import org.javabasics.utenti.serviceUtente.ServiceUtente;;
 
 public class Application {
 
   public static void main(String[] args) {
 
-    Map<Integer, Prenotazione> prenotazioniMap = new HashMap<>();
-    Map<Integer, Obbiettivo> obbiettiviMap = new HashMap<>();
-    Map<Integer, Utente> utentiMap = new HashMap<>();
+    ServiceUtente serviceUtente = new ServiceUtente();
+    serviceUtente.caricaUtenti();
 
-    System.out.println("-------------------------------------------------------------------------");
+    ServiceObbiettivi serviceObbiettivi = new ServiceObbiettivi();
+    serviceObbiettivi.caricaObbiettivi();
 
-    utentiMap = RepositoryUtente.estraiDatiUtente();
-    ControllerUtente.stampaUtenti(utentiMap);
+    ServicePrenotazioni servicePrenotazioni = new ServicePrenotazioni();
+    servicePrenotazioni.caricaPrenotazioni();
 
-    System.out.println("-------------------------------------------------------------------------");
+    serviceUtente.stampaUtenti();
+    serviceObbiettivi.stampaObbiettivi();
+    servicePrenotazioni.stampaPrenotazioni();
 
-    obbiettiviMap = RepositoryObbiettivi.estraiDatiObbiettivos();
-    ControllerObbiettivi.stampaObbiettivi(obbiettiviMap);
-    System.out.println("-------------------------------------------------------------------------");
-
-    prenotazioniMap = repositoryPrenotazioni.estraiDatiPrenotazioni();
-    ControllerPrenotazioni.stampaPrenotazioni(prenotazioniMap);
-    System.out.println("-------------------------------------------------------------------------");
+    mainController.start();
   }
 }
