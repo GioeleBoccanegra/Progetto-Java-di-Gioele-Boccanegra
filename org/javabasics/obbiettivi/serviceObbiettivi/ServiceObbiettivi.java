@@ -16,7 +16,14 @@ public class ServiceObbiettivi {
   public void stampaObbiettivi() {
     for (Obbiettivo obbiettivo : obbiettiviMap
         .values()) {
+
+      System.out.println("--------------------------------------------------------------------");
+      System.out.println("");
       System.out.println(obbiettivo.toString());
+      System.out.println("");
+      System.out.println("--------------------------------------------------------------------");
+
     }
   }
+
 }
