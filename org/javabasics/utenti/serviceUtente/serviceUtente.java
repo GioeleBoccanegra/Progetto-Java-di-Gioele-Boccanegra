@@ -34,4 +34,11 @@ public class ServiceUtente {
     }
   }
 
+  public static int getProssimoIdLibero(Map<Integer, Utente> mappa) {
+    if (mappa.isEmpty()) {
+      return 1;
+    }
+    return mappa.keySet().stream().max(Integer::compareTo).get() + 1;
+  }
+
 }

@@ -1,5 +1,6 @@
 package org.javabasics.mainService;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -7,6 +8,7 @@ import org.javabasics.obbiettivi.modelObbiettivi.Obbiettivo;
 import org.javabasics.obbiettivi.serviceObbiettivi.ServiceObbiettivi;
 import org.javabasics.prenotazioni.modelPrenotazioni.Prenotazione;
 import org.javabasics.prenotazioni.servicePrenotazioni.ServicePrenotazioni;
+import org.javabasics.utenti.modelUtente.Utente;
 import org.javabasics.utenti.serviceUtente.ServiceUtente;
 
 public class MainService {
@@ -68,8 +70,43 @@ public class MainService {
         }
         break;
 
+      case 4:
+        System.out.println(ServiceUtente.getInstance().utentiMap);
+        Integer id = ServiceUtente.getProssimoIdLibero(ServiceUtente.getInstance().utentiMap);
+        System.out.println("inserisci il nome dell' utente ");
+        String nomeUtente = scan.next();
+        System.out.println("inserisci il cognome dell' utente ");
+        String cognomeUtente = scan.next();
+        System.out.println("inserisci data di nascita nel formato gg/mm/aaaa");
+        String inputData = scan.next();
+        Date dataNascita;
+        if ((dataNascita = verificaData(inputData)) != null) {
+          System.out.println("inserisci indirizzo utente");
+          String indirizzoUtente = scan.next();
+          System.out.println("inserisci id documento");
+          String documentoId = scan.next();
+          Utente nuovoUtente = new Utente(id, nomeUtente, cognomeUtente, dataNascita, indirizzoUtente, documentoId);
+          ServiceUtente.getInstance().utentiMap.put(id, nuovoUtente);
+          System.out.println("utente creato " + nuovoUtente);
+          System.out.println(ServiceUtente.getInstance().utentiMap);
+
+        }
+
+        break;
+
     }
 
   }
 
+  public Date verificaData(String inputData) {
+    try {
+      SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+      sdf.setLenient(false);
+      Date dataNascita = sdf.parse(inputData);
+      return dataNascita;
+    } catch (Exception e) {
+      System.out.println("formato data non valida");
+      return null;
+    }
+  }
 }
