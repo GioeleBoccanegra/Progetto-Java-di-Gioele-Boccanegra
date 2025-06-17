@@ -27,8 +27,7 @@ public class MainService {
           Integer idUtente = scan.nextInt();
 
           if (ServiceUtente.getInstance().utentiMap.containsKey(idUtente)) {
-            Obbiettivo oa = ServiceObbiettivi.getInstance().estraiObbiettivo(idObbiettivo);
-            System.out.println(oa.toString());
+
             if (serviceObbiettivi.obbiettivoLibero(idObbiettivo)) {
               Obbiettivo o = ServiceObbiettivi.getInstance().estraiObbiettivo(idObbiettivo);
               o.modificaDisponibilitaObbiettivo();
@@ -37,6 +36,8 @@ public class MainService {
               Date dataFine = null;
               Prenotazione prenotazione = new Prenotazione(nuovoId, idObbiettivo, idUtente, dataInizio, dataFine);
               ServicePrenotazioni.getInstance().prenotazioniMap.put(nuovoId, prenotazione);
+
+              System.out.println("Prenotazione creata: " + prenotazione);
 
             } else {
               System.out.println("obbiettivo già prenotato");
