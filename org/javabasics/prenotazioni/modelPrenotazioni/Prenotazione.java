@@ -18,6 +18,10 @@ public class Prenotazione {
 
   }
 
+  public Integer getIdCorso() {
+    return idCorso;
+  }
+
   @Override
   public String toString() {
     return "Prenotazione{" +

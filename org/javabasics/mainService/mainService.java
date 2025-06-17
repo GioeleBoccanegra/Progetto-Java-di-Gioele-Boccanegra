@@ -52,6 +52,22 @@ public class MainService {
 
         break;
 
+      case 3:
+        System.out.println("Insercisci id Prenotazione da eliminare");
+        Integer idPrenotazione = scan.nextInt();
+        if (ServicePrenotazioni.getInstance().prenotazioniMap.containsKey(idPrenotazione)) {
+
+          Prenotazione p = ServicePrenotazioni.getInstance().prenotazioniMap.get(idPrenotazione);
+          ServicePrenotazioni.getInstance().prenotazioniMap.remove(idPrenotazione);
+          Obbiettivo o = ServiceObbiettivi.getInstance().obbiettiviMap.get(p.getIdCorso());
+          o.modificaDisponibilitaObbiettivo();
+          System.out.println("prenotazione numero " + idPrenotazione + " eliminata");
+
+        } else {
+          System.out.println("Prenotazione non trovata");
+        }
+        break;
+
     }
 
   }
