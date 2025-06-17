@@ -10,7 +10,7 @@ public class ServicePrenotazioni {
 
   private static ServicePrenotazioni instance = null;
 
-  protected Map<Integer, Prenotazione> prenotazioniMap = new HashMap<>();
+  public Map<Integer, Prenotazione> prenotazioniMap = new HashMap<>();
 
   private ServicePrenotazioni() {
 
@@ -33,4 +33,12 @@ public class ServicePrenotazioni {
     }
 
   }
+
+  public static int getProssimoIdLibero(Map<Integer, Prenotazione> mappa) {
+    if (mappa.isEmpty()) {
+      return 1;
+    }
+    return mappa.keySet().stream().max(Integer::compareTo).get() + 1;
+  }
+
 }

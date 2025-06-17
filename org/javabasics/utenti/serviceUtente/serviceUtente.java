@@ -13,7 +13,7 @@ public class ServiceUtente {
 
   }
 
-  protected Map<Integer, Utente> utentiMap = new HashMap<>();
+  public Map<Integer, Utente> utentiMap = new HashMap<>();
 
   public static ServiceUtente getInstance() {
 

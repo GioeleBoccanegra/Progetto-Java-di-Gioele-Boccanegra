@@ -13,7 +13,7 @@ public class RepositoryObbiettivi {
   public static Map<Integer, Obbiettivo> estraiDatiObbiettivos() {
     File fileObbiettivi = new File(
         "C:/Users/39328/Desktop/tutto/start_to_impact/8java/MeditActive/org/javabasics/dati/obiettivi.csv");
-    
+
     Map<Integer, Obbiettivo> obbiettiviMap = new HashMap<>();
 
     if (fileObbiettivi.exists()) {
@@ -28,7 +28,12 @@ public class RepositoryObbiettivi {
           String descrizione = datiObbiettivo[2];
           String tipologia = datiObbiettivo[3];
           Integer durata = Integer.parseInt(datiObbiettivo[4]);
-          String disponibile = datiObbiettivo[5];
+          Boolean disponibile = null;
+          if ("SI".equals(datiObbiettivo[5])) {
+            disponibile = true;
+          } else {
+            disponibile = false;
+          }
 
           Obbiettivo obbiettivo = new Obbiettivo(id, nome, descrizione, tipologia, durata, disponibile);
           obbiettiviMap.put(id, obbiettivo);

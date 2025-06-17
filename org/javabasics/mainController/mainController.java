@@ -15,7 +15,7 @@ public class MainController {
       controllaRisposta(scan);
       risposta = scan.nextInt();
       MainService mainService = new MainService();
-      mainService.ScegliOperazione(risposta);
+      mainService.ScegliOperazione(risposta, scan);
 
     } while (risposta != 0);
 

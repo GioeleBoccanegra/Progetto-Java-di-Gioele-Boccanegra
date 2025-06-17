@@ -11,7 +11,7 @@ public class ServiceObbiettivi {
   // 1. Istanza statica privata e unica
   private static ServiceObbiettivi instance = null;
 
-  protected Map<Integer, Obbiettivo> obbiettiviMap = new HashMap<>();
+  public Map<Integer, Obbiettivo> obbiettiviMap = new HashMap<>();
 
   // 2. Costruttore privato
   private ServiceObbiettivi() {
@@ -37,5 +37,18 @@ public class ServiceObbiettivi {
       System.out.println("");
       System.out.println("--------------------------------------------------------------------");
     }
+  }
+
+  public Boolean obbiettivoLibero(Integer idObbiettivo) {
+    Obbiettivo obbiettivo = ServiceObbiettivi.getInstance().obbiettiviMap.get(idObbiettivo);
+    if (obbiettivo.isDisponibile()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public Obbiettivo estraiObbiettivo(Integer idObbiettivo) {
+    return ServiceObbiettivi.getInstance().obbiettiviMap.get(idObbiettivo);
   }
 }
