@@ -37,6 +37,10 @@ public class Obbiettivo {
     }
   }
 
+  public String formata() {
+    return id + ";" + nome + ";" + descrizione + ";" + tipologia + ";" + durata + ";" + disponibile;
+  }
+
   @Override
   public String toString() {
     return "Obbiettivo{" +

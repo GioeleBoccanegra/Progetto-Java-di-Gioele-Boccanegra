@@ -10,6 +10,7 @@ import org.javabasics.prenotazioni.modelPrenotazioni.Prenotazione;
 import org.javabasics.prenotazioni.servicePrenotazioni.ServicePrenotazioni;
 import org.javabasics.utenti.modelUtente.Utente;
 import org.javabasics.utenti.serviceUtente.ServiceUtente;
+import org.javabasics.obbiettivi.repositoryObbiettivi.RepositoryObbiettivi;
 
 public class MainService {
   public void ScegliOperazione(Integer risposta, Scanner scan) {
@@ -91,6 +92,16 @@ public class MainService {
           System.out.println(ServiceUtente.getInstance().utentiMap);
 
         }
+
+        break;
+
+      case 5:
+
+        System.out.println("inizio esportazione file");
+
+        RepositoryObbiettivi.creaFileObbiettivi();
+
+        System.out.println("fine esportazione file");
 
         break;
 
