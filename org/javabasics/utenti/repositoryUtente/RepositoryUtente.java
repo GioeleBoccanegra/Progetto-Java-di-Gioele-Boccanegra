@@ -29,6 +29,20 @@ public class RepositoryUtente {
 
         while ((linea = br.readLine()) != null) {
           String[] datiUtente = linea.split(";");
+
+          if (linea.trim().isEmpty()) {
+            continue;
+          }
+
+          if (datiUtente.length < 6) {
+            System.out.println("Riga incompleta (ignorata): " + linea);
+            continue;
+          }
+
+          if (datiUtente[0].trim().isEmpty()) {
+            throw new RuntimeException("Campo id vuoto :" + linea);
+          }
+
           Integer id = Integer.parseInt(datiUtente[0]);
           String nome = datiUtente[1];
           String cognome = datiUtente[2];

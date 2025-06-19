@@ -27,7 +27,26 @@ public class RepositoryObbiettivi {
         linea = br.readLine(); // salta intestazione
 
         while ((linea = br.readLine()) != null) {
+
           String[] datiObbiettivo = linea.split(";");
+
+          if (linea.trim().isEmpty()) {
+            continue;
+          }
+
+          if (datiObbiettivo.length < 6) {
+            System.out.println("Riga incompleta (ignorata): " + linea);
+            continue;
+          }
+
+          if (datiObbiettivo[0].trim().isEmpty()) {
+            throw new RuntimeException("Campo id vuoto :" + linea);
+          }
+
+          if (datiObbiettivo[4].trim().isEmpty()) {
+            throw new RuntimeException("Campo duarata :" + linea);
+          }
+
           Integer id = Integer.parseInt(datiObbiettivo[0]);
           String nome = datiObbiettivo[1];
           String descrizione = datiObbiettivo[2];
@@ -67,27 +86,33 @@ public class RepositoryObbiettivi {
 
     try {
       fileObbiettivi.createNewFile();
+
       if (fileObbiettivi.exists()) {
-        BufferedWriter bw = new BufferedWriter(new FileWriter(fileObbiettivi, true));
 
-        bw.write("id;nome;descrizione;tipologia;durata;disponibile");
-        bw.newLine();
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileObbiettivi, true))) {
 
-        for (Obbiettivo o : ServiceObbiettivi.getInstance().obbiettiviMap.values()) {
-          if (o.isDisponibile()) {
-            bw.write(o.formata());
-            bw.newLine();
+          bw.write("id;nome;descrizione;tipologia;durata;disponibile");
+          bw.newLine();
+
+          for (Obbiettivo o : ServiceObbiettivi.getInstance().obbiettiviMap.values()) {
+            if (o.isDisponibile()) {
+              bw.write(o.formatta());
+              bw.newLine();
+            }
           }
 
+          System.out.println(
+              "file creato con successo: C:/Users/39328/Desktop/tutto/start_to_impact/8java/MeditActive/org/javabasics/dati/obbiettivi"
+                  + dataFormattata + ".csv");
+
         }
-        bw.close();
+
       } else {
         System.out.println("file non trovato");
       }
     } catch (IOException e) {
       System.out.println("errore nella creazione del file : " + e.getMessage());
     }
-
   }
 
   public static void sostituisciDisponibilitaObbiettivo(Integer idObbiettivo) {
@@ -97,9 +122,8 @@ public class RepositoryObbiettivi {
     File fileTemp = new File(
         "C:/Users/39328/Desktop/tutto/start_to_impact/8java/MeditActive/org/javabasics/dati/obiettivi_temp.csv");
 
-    try {
-      BufferedReader br = new BufferedReader(new FileReader(fileObbiettivi));
-      BufferedWriter bw = new BufferedWriter(new FileWriter(fileTemp));
+    try (BufferedReader br = new BufferedReader(new FileReader(fileObbiettivi));
+        BufferedWriter bw = new BufferedWriter(new FileWriter(fileTemp))) {
 
       String linea;
 
@@ -109,16 +133,36 @@ public class RepositoryObbiettivi {
       }
 
       while ((linea = br.readLine()) != null) {
-        String[] dati = linea.split(";");
-        int id = Integer.parseInt((dati[0]));
+        String[] datiObbiettivo = linea.split(";");
+
+        if (linea.trim().isEmpty()) {
+          continue;
+        }
+
+        if (datiObbiettivo.length < 6) {
+          System.out.println("Riga incompleta (ignorata): " + linea);
+          continue;
+        }
+
+        if (datiObbiettivo[0].trim().isEmpty()) {
+          throw new RuntimeException("Campo id vuoto :" + linea);
+        }
+
+        if (datiObbiettivo[4].trim().isEmpty()) {
+          throw new RuntimeException("Campo duarata :" + linea);
+        }
+
+        int id = Integer.parseInt((datiObbiettivo[0]));
         if (id == idObbiettivo) {
-          if ("SI".equals(dati[5])) {
-            dati[5] = "NO";
+          if ("SI".equals(datiObbiettivo[5])) {
+            datiObbiettivo[5] = "NO";
+            System.out.println("cambiata dispnibilità obbiteiivo: " + idObbiettivo);
           } else {
-            dati[5] = "SI";
+            datiObbiettivo[5] = "SI";
+            System.out.println("cambiata dispnibilità obbiteiivo: " + idObbiettivo);
           }
 
-          linea = String.join(";", dati);
+          linea = String.join(";", datiObbiettivo);
         }
 
         bw.write(linea);

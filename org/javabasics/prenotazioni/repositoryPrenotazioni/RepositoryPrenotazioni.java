@@ -88,6 +88,7 @@ public class RepositoryPrenotazioni {
         bw.newLine();
         bw.write(p.formatta());
         bw.close();
+        System.out.println("prenotazione numero " + p.getId() + " aggiunta");
       } else {
         System.out.println("file non trovato");
       }
@@ -145,6 +146,8 @@ public class RepositoryPrenotazioni {
     if (!fileTemp.renameTo(file)) {
       System.out.println("Impossibile rinominare il file temporaneo.");
     }
+
+    System.out.println("prenotazione numero " + idPrenotazione + " eliminata");
 
   }
 

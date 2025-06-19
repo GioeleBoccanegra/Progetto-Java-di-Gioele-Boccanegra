@@ -21,6 +21,10 @@ public class Prenotazione {
 
   }
 
+  public Integer getId() {
+    return id;
+  }
+
   public Integer getIdCorso() {
     return idCorso;
   }

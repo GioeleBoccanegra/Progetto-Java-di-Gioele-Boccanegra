@@ -37,7 +37,7 @@ public class Obbiettivo {
     }
   }
 
-  public String formata() {
+  public String formatta() {
     return id + ";" + nome + ";" + descrizione + ";" + tipologia + ";" + durata + ";" + disponibile;
   }
 

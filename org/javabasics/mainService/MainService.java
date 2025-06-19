@@ -46,8 +46,6 @@ public class MainService {
               RepositoryObbiettivi.sostituisciDisponibilitaObbiettivo(idObbiettivo);
               ServiceObbiettivi.getInstance().caricaObbiettivi();
               ServicePrenotazioni.getInstance().caricaPrenotazioni();
-              System.out.println(ServiceObbiettivi.getInstance().obbiettiviMap);
-              System.out.println(ServicePrenotazioni.getInstance().prenotazioniMap);
 
               System.out.println("Prenotazione creata: " + prenotazione);
 
@@ -72,15 +70,10 @@ public class MainService {
 
           Prenotazione p = ServicePrenotazioni.getInstance().prenotazioniMap.get(idPrenotoazione);
           RepositoryPrenotazioni.eliminaPrenotazione(idPrenotoazione);
-
           RepositoryObbiettivi.sostituisciDisponibilitaObbiettivo(p.getIdCorso());
 
           ServiceObbiettivi.getInstance().caricaObbiettivi();
           ServicePrenotazioni.getInstance().caricaPrenotazioni();
-
-          System.out.println(ServiceObbiettivi.getInstance().obbiettiviMap);
-          System.out.println(ServicePrenotazioni.getInstance().prenotazioniMap);
-          System.out.println("prenotazione numero " + idPrenotoazione + " eliminata");
 
         } else {
           System.out.println("Prenotazione non trovata");
@@ -89,7 +82,6 @@ public class MainService {
 
       case 4:
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        System.out.println(ServiceUtente.getInstance().utentiMap);
         Integer id = ServiceUtente.getProssimoIdLibero(ServiceUtente.getInstance().utentiMap);
         System.out.println("inserisci il nome dell' utente ");
         String nomeUtente = scan.next();
@@ -106,7 +98,6 @@ public class MainService {
           Utente nuovoUtente = new Utente(id, nomeUtente, cognomeUtente, dataNascita, indirizzoUtente, documentoId);
           RepositoryUtente.aggiungiUtente(nuovoUtente);
           ServiceUtente.getInstance().caricaUtenti();
-          System.out.println(ServiceUtente.getInstance().utentiMap);
 
         }
 
@@ -114,11 +105,7 @@ public class MainService {
 
       case 5:
 
-        System.out.println("inizio esportazione file");
-
         RepositoryObbiettivi.creaFileObbiettivi();
-
-        System.out.println("fine esportazione file");
 
         break;
 
