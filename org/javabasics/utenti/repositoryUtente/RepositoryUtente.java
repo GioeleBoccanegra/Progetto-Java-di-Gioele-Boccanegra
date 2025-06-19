@@ -7,17 +7,17 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.javabasics.utenti.modelUtente.Utente;
+import org.javabasics.utenti.serviceUtente.ServiceUtente;
 
 public class RepositoryUtente {
   public static Map<Integer, Utente> estraiDatiUtente() {
     File fileUtenti = new File(
         "C:/Users/39328/Desktop/tutto/start_to_impact/8java/MeditActive/org/javabasics/dati/utenti.csv");
 
-    Map<Integer, Utente> utentiMap = new HashMap<>();
+    ServiceUtente.getInstance().svuotaMappa();
 
     if (fileUtenti.exists()) {
       try (BufferedReader br = new BufferedReader(new FileReader(fileUtenti))) {
@@ -34,7 +34,7 @@ public class RepositoryUtente {
           String telefono = datiUtente[5];
 
           Utente utente = new Utente(id, nome, cognome, dataNascita, email, telefono);
-          utentiMap.put(id, utente);
+          ServiceUtente.getInstance().utentiMap.put(id, utente);
         }
 
       } catch (IOException | ParseException e) {
@@ -46,6 +46,6 @@ public class RepositoryUtente {
       System.out.println("Il file utenti.csv non esiste");
     }
 
-    return utentiMap;
+    return ServiceUtente.getInstance().utentiMap;
   }
 }

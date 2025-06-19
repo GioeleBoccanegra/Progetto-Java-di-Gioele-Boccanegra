@@ -1,15 +1,18 @@
 package org.javabasics.prenotazioni.modelPrenotazioni;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Prenotazione {
   protected Integer id;
   protected Integer idCorso;
   protected Integer idUtente;
-  protected Date dataInizio;
-  protected Date dataFine;
+  protected LocalDate dataInizio;
+  protected LocalDate dataFine;
 
-  public Prenotazione(Integer id, Integer idCorso, Integer idUtente, Date dataInizio, Date dataFine) {
+  private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+  public Prenotazione(Integer id, Integer idCorso, Integer idUtente, LocalDate dataInizio, LocalDate dataFine) {
     this.id = id;
     this.idCorso = idCorso;
     this.idUtente = idUtente;
@@ -20,6 +23,12 @@ public class Prenotazione {
 
   public Integer getIdCorso() {
     return idCorso;
+  }
+
+  public String formatta() {
+    return id + ";" + idCorso + ";" + idUtente + ";" +
+        (dataInizio != null ? dataInizio.format(FORMATTER) : "") + ";" +
+        (dataFine != null ? dataFine.format(FORMATTER) : "");
   }
 
   @Override

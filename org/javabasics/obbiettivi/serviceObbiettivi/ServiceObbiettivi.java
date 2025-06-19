@@ -26,7 +26,7 @@ public class ServiceObbiettivi {
   }
 
   public void caricaObbiettivi() {
-    obbiettiviMap = RepositoryObbiettivi.estraiDatiObbiettivos();
+    obbiettiviMap = RepositoryObbiettivi.estraiDatiObbiettivo();
   }
 
   public void stampaObbiettivi() {
@@ -50,5 +50,9 @@ public class ServiceObbiettivi {
 
   public Obbiettivo estraiObbiettivo(Integer idObbiettivo) {
     return ServiceObbiettivi.getInstance().obbiettiviMap.get(idObbiettivo);
+  }
+
+  public void svuotaMappa() {
+    ServiceObbiettivi.getInstance().obbiettiviMap.clear();
   }
 }

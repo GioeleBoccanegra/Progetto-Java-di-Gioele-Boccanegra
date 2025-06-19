@@ -41,4 +41,8 @@ public class ServicePrenotazioni {
     return mappa.keySet().stream().max(Integer::compareTo).get() + 1;
   }
 
+  public void svuotaMappa() {
+    ServicePrenotazioni.getInstance().prenotazioniMap.clear();
+  }
+
 }

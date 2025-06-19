@@ -1,6 +1,7 @@
 package org.javabasics.mainService;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -11,6 +12,7 @@ import org.javabasics.prenotazioni.servicePrenotazioni.ServicePrenotazioni;
 import org.javabasics.utenti.modelUtente.Utente;
 import org.javabasics.utenti.serviceUtente.ServiceUtente;
 import org.javabasics.obbiettivi.repositoryObbiettivi.RepositoryObbiettivi;
+import org.javabasics.prenotazioni.repositoryPrenotazioni.RepositoryPrenotazioni;
 
 public class MainService {
   public void ScegliOperazione(Integer risposta, Scanner scan) {
@@ -35,10 +37,17 @@ public class MainService {
               Obbiettivo o = ServiceObbiettivi.getInstance().estraiObbiettivo(idObbiettivo);
               o.modificaDisponibilitaObbiettivo();
               int nuovoId = ServicePrenotazioni.getProssimoIdLibero(ServicePrenotazioni.getInstance().prenotazioniMap);
-              Date dataInizio = new Date();
-              Date dataFine = null;
+
+              LocalDate dataInizio = LocalDate.now();
+
+              LocalDate dataFine = dataInizio.plusDays(7);
               Prenotazione prenotazione = new Prenotazione(nuovoId, idObbiettivo, idUtente, dataInizio, dataFine);
-              ServicePrenotazioni.getInstance().prenotazioniMap.put(nuovoId, prenotazione);
+              RepositoryPrenotazioni.aggiungiPrenotazione(prenotazione);
+              RepositoryObbiettivi.sostituisciDisponibilitaObbiettivo(idObbiettivo);
+              ServiceObbiettivi.getInstance().caricaObbiettivi();
+              ServicePrenotazioni.getInstance().caricaPrenotazioni();
+              System.out.println(ServiceObbiettivi.getInstance().obbiettiviMap);
+              System.out.println(ServicePrenotazioni.getInstance().prenotazioniMap);
 
               System.out.println("Prenotazione creata: " + prenotazione);
 
@@ -56,15 +65,12 @@ public class MainService {
         break;
 
       case 3:
-        System.out.println("Insercisci id Prenotazione da eliminare");
-        Integer idPrenotazione = scan.nextInt();
-        if (ServicePrenotazioni.getInstance().prenotazioniMap.containsKey(idPrenotazione)) {
-
-          Prenotazione p = ServicePrenotazioni.getInstance().prenotazioniMap.get(idPrenotazione);
-          ServicePrenotazioni.getInstance().prenotazioniMap.remove(idPrenotazione);
-          Obbiettivo o = ServiceObbiettivi.getInstance().obbiettiviMap.get(p.getIdCorso());
-          o.modificaDisponibilitaObbiettivo();
-          System.out.println("prenotazione numero " + idPrenotazione + " eliminata");
+        System.out.println("Insercisci id obbiettivo da eliminare");
+        Integer idObb = scan.nextInt();
+        if (ServiceObbiettivi.getInstance().obbiettiviMap.containsKey(idObb)) {
+          RepositoryObbiettivi.RimuoviObbiettivofile(idObb);
+          serviceObbiettivi.caricaObbiettivi();
+          System.out.println("prenotazione numero " + idObb + " eliminata");
 
         } else {
           System.out.println("Prenotazione non trovata");
@@ -120,4 +126,5 @@ public class MainService {
       return null;
     }
   }
+
 }

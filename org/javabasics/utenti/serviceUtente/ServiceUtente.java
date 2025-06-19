@@ -41,4 +41,8 @@ public class ServiceUtente {
     return mappa.keySet().stream().max(Integer::compareTo).get() + 1;
   }
 
+  public void svuotaMappa() {
+    ServiceUtente.getInstance().utentiMap.clear();
+  }
+
 }

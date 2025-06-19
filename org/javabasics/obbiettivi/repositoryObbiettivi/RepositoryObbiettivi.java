@@ -8,21 +8,21 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.javabasics.obbiettivi.modelObbiettivi.Obbiettivo;
 import org.javabasics.obbiettivi.serviceObbiettivi.ServiceObbiettivi;
 
 public class RepositoryObbiettivi {
-  public static Map<Integer, Obbiettivo> estraiDatiObbiettivos() {
+  public static Map<Integer, Obbiettivo> estraiDatiObbiettivo() {
     File fileObbiettivi = new File(
         "C:/Users/39328/Desktop/tutto/start_to_impact/8java/MeditActive/org/javabasics/dati/obiettivi.csv");
 
-    Map<Integer, Obbiettivo> obbiettiviMap = new HashMap<>();
+    ServiceObbiettivi.getInstance().svuotaMappa();
 
     if (fileObbiettivi.exists()) {
       try (BufferedReader br = new BufferedReader(new FileReader(fileObbiettivi))) {
+
         String linea;
         linea = br.readLine(); // salta intestazione
 
@@ -41,7 +41,7 @@ public class RepositoryObbiettivi {
           }
 
           Obbiettivo obbiettivo = new Obbiettivo(id, nome, descrizione, tipologia, durata, disponibile);
-          obbiettiviMap.put(id, obbiettivo);
+          ServiceObbiettivi.getInstance().obbiettiviMap.put(id, obbiettivo);
         }
 
       } catch (IOException e) {
@@ -53,7 +53,7 @@ public class RepositoryObbiettivi {
       System.out.println("Il file obiettivi.csv non esiste");
     }
 
-    return obbiettiviMap;
+    return ServiceObbiettivi.getInstance().obbiettiviMap;
   }
 
   public static void creaFileObbiettivi() {
@@ -89,4 +89,103 @@ public class RepositoryObbiettivi {
     }
 
   }
+
+  public static void sostituisciDisponibilitaObbiettivo(Integer idObbiettivo) {
+    File fileObbiettivi = new File(
+        "C:/Users/39328/Desktop/tutto/start_to_impact/8java/MeditActive/org/javabasics/dati/obiettivi.csv");
+
+    File fileTemp = new File(
+        "C:/Users/39328/Desktop/tutto/start_to_impact/8java/MeditActive/org/javabasics/dati/obiettivi_temp.csv");
+
+    try {
+      BufferedReader br = new BufferedReader(new FileReader(fileObbiettivi));
+      BufferedWriter bw = new BufferedWriter(new FileWriter(fileTemp));
+
+      String linea;
+
+      if ((linea = br.readLine()) != null) {
+        bw.write(linea);
+        bw.newLine();
+      }
+
+      while ((linea = br.readLine()) != null) {
+        String[] dati = linea.split(";");
+        int id = Integer.parseInt((dati[0]));
+        if (id == idObbiettivo) {
+          dati[5] = "NO";
+          linea = String.join(";", dati);
+        }
+
+        bw.write(linea);
+        bw.newLine();
+      }
+
+      bw.close();
+      br.close();
+
+    } catch (IOException e) {
+      System.out.println("Errore durante l'aggiornamento del file: " + e.getMessage());
+      e.printStackTrace();
+      return;
+    }
+
+    if (!fileObbiettivi.delete()) {
+      System.out.println("Impossibile eliminare il file originale.");
+      return;
+    }
+
+    if (!fileTemp.renameTo(fileObbiettivi)) {
+      System.out.println("Impossibile rinominare il file temporaneo.");
+    }
+
+  }
+
+  public static void RimuoviObbiettivofile(Integer idObbiettivo) {
+    File file = new File(
+        "C:/Users/39328/Desktop/tutto/start_to_impact/8java/MeditActive/org/javabasics/dati/obiettivi.csv");
+    File fileTemp = new File(
+        "C:/Users/39328/Desktop/tutto/start_to_impact/8java/MeditActive/org/javabasics/dati/obiettivi_el_temp.csv");
+
+    try {
+      BufferedReader br = new BufferedReader(new FileReader(file));
+      BufferedWriter bw = new BufferedWriter(new FileWriter(fileTemp));
+
+      String linea;
+      if ((linea = br.readLine()) != null) {
+        bw.write(linea);
+        bw.newLine();
+      }
+
+      while ((linea = br.readLine()) != null) {
+        String[] dati = linea.split(";");
+        int id = Integer.parseInt((dati[0]));
+        if (id == idObbiettivo) {
+          continue;
+        }
+
+        linea = String.join(";", dati);
+
+        bw.write(linea);
+        bw.newLine();
+      }
+
+      br.close();
+      bw.close();
+
+    } catch (IOException e) {
+      System.out.println("Errore durante l'aggiornamento del file: " + e.getMessage());
+      e.printStackTrace();
+      return;
+    }
+
+    if (!file.delete()) {
+      System.out.println("Impossibile eliminare il file originale.");
+      return;
+    }
+
+    if (!fileTemp.renameTo(file)) {
+      System.out.println("Impossibile rinominare il file temporaneo.");
+    }
+  }
+
 }
