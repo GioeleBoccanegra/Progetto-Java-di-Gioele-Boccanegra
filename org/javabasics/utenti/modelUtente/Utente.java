@@ -1,16 +1,19 @@
 package org.javabasics.utenti.modelUtente;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Utente {
   protected Integer id;
   protected String nome;
   protected String cognome;
-  protected Date dataNascita;
+  protected LocalDate dataNascita;
   protected String indirizzo;
   protected String documentoId;
 
-  public Utente(Integer id, String nome, String cognome, Date dataNascita, String indirizzo, String documentoId) {
+  private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+  public Utente(Integer id, String nome, String cognome, LocalDate dataNascita, String indirizzo, String documentoId) {
     this.id = id;
     this.nome = nome;
     this.cognome = cognome;
@@ -22,6 +25,15 @@ public class Utente {
 
   public Integer getId() {
     return id;
+  }
+
+  public String formatta() {
+    return id + ";"
+        + nome + ";"
+        + cognome + ";"
+        + (dataNascita != null ? dataNascita.format(FORMATTER) : "") + ";"
+        + indirizzo + ";"
+        + documentoId;
   }
 
   @Override

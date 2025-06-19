@@ -97,4 +97,55 @@ public class RepositoryPrenotazioni {
 
   }
 
+  public static void eliminaPrenotazione(Integer idPrenotazione) {
+    File file = new File(
+        "C:/Users/39328/Desktop/tutto/start_to_impact/8java/MeditActive/org/javabasics/dati/prenotazioni.csv");
+
+    File fileTemp = new File(
+        "C:/Users/39328/Desktop/tutto/start_to_impact/8java/MeditActive/org/javabasics/dati/prenotazioni_temp.csv");
+
+    try {
+      BufferedReader br = new BufferedReader(new FileReader(file));
+      BufferedWriter bw = new BufferedWriter(new FileWriter(fileTemp));
+
+      String linea;
+
+      if ((linea = br.readLine()) != null) {
+        bw.write(linea);
+        bw.newLine();
+      }
+
+      while ((linea = br.readLine()) != null) {
+        String[] dati = linea.split(";");
+        int id = Integer.parseInt((dati[0]));
+        if (id == idPrenotazione) {
+
+          continue;
+        }
+
+        linea = String.join(";", dati);
+        bw.write(linea);
+        bw.newLine();
+      }
+
+      bw.close();
+      br.close();
+
+    } catch (IOException e) {
+      System.out.println("Errore durante l'aggiornamento del file: " + e.getMessage());
+      e.printStackTrace();
+      return;
+    }
+
+    if (!file.delete()) {
+      System.out.println("Impossibile eliminare il file originale.");
+      return;
+    }
+
+    if (!fileTemp.renameTo(file)) {
+      System.out.println("Impossibile rinominare il file temporaneo.");
+    }
+
+  }
+
 }

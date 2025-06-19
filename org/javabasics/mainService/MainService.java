@@ -1,8 +1,7 @@
 package org.javabasics.mainService;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 import org.javabasics.obbiettivi.modelObbiettivi.Obbiettivo;
@@ -10,6 +9,7 @@ import org.javabasics.obbiettivi.serviceObbiettivi.ServiceObbiettivi;
 import org.javabasics.prenotazioni.modelPrenotazioni.Prenotazione;
 import org.javabasics.prenotazioni.servicePrenotazioni.ServicePrenotazioni;
 import org.javabasics.utenti.modelUtente.Utente;
+import org.javabasics.utenti.repositoryUtente.RepositoryUtente;
 import org.javabasics.utenti.serviceUtente.ServiceUtente;
 import org.javabasics.obbiettivi.repositoryObbiettivi.RepositoryObbiettivi;
 import org.javabasics.prenotazioni.repositoryPrenotazioni.RepositoryPrenotazioni;
@@ -66,11 +66,21 @@ public class MainService {
 
       case 3:
         System.out.println("Insercisci id obbiettivo da eliminare");
-        Integer idObb = scan.nextInt();
-        if (ServiceObbiettivi.getInstance().obbiettiviMap.containsKey(idObb)) {
-          RepositoryObbiettivi.RimuoviObbiettivofile(idObb);
-          serviceObbiettivi.caricaObbiettivi();
-          System.out.println("prenotazione numero " + idObb + " eliminata");
+        Integer idPrenotoazione = scan.nextInt();
+
+        if (ServicePrenotazioni.getInstance().prenotazioniMap.containsKey(idPrenotoazione)) {
+
+          Prenotazione p = ServicePrenotazioni.getInstance().prenotazioniMap.get(idPrenotoazione);
+          RepositoryPrenotazioni.eliminaPrenotazione(idPrenotoazione);
+
+          RepositoryObbiettivi.sostituisciDisponibilitaObbiettivo(p.getIdCorso());
+
+          ServiceObbiettivi.getInstance().caricaObbiettivi();
+          ServicePrenotazioni.getInstance().caricaPrenotazioni();
+
+          System.out.println(ServiceObbiettivi.getInstance().obbiettiviMap);
+          System.out.println(ServicePrenotazioni.getInstance().prenotazioniMap);
+          System.out.println("prenotazione numero " + idPrenotoazione + " eliminata");
 
         } else {
           System.out.println("Prenotazione non trovata");
@@ -78,6 +88,7 @@ public class MainService {
         break;
 
       case 4:
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         System.out.println(ServiceUtente.getInstance().utentiMap);
         Integer id = ServiceUtente.getProssimoIdLibero(ServiceUtente.getInstance().utentiMap);
         System.out.println("inserisci il nome dell' utente ");
@@ -86,15 +97,15 @@ public class MainService {
         String cognomeUtente = scan.next();
         System.out.println("inserisci data di nascita nel formato gg/mm/aaaa");
         String inputData = scan.next();
-        Date dataNascita;
-        if ((dataNascita = verificaData(inputData)) != null) {
+        LocalDate dataNascita;
+        if ((dataNascita = verificaData(inputData, formatter)) != null) {
           System.out.println("inserisci indirizzo utente");
           String indirizzoUtente = scan.next();
           System.out.println("inserisci id documento");
           String documentoId = scan.next();
           Utente nuovoUtente = new Utente(id, nomeUtente, cognomeUtente, dataNascita, indirizzoUtente, documentoId);
-          ServiceUtente.getInstance().utentiMap.put(id, nuovoUtente);
-          System.out.println("utente creato " + nuovoUtente);
+          RepositoryUtente.aggiungiUtente(nuovoUtente);
+          ServiceUtente.getInstance().caricaUtenti();
           System.out.println(ServiceUtente.getInstance().utentiMap);
 
         }
@@ -115,12 +126,10 @@ public class MainService {
 
   }
 
-  public Date verificaData(String inputData) {
+  public LocalDate verificaData(String inputData, DateTimeFormatter formatter) {
     try {
-      SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-      sdf.setLenient(false);
-      Date dataNascita = sdf.parse(inputData);
-      return dataNascita;
+      return LocalDate.parse(inputData, formatter);
+
     } catch (Exception e) {
       System.out.println("formato data non valida");
       return null;
