@@ -24,6 +24,7 @@ public class ServicePrenotazioni {
   }
 
   public void caricaPrenotazioni() {
+
     prenotazioniMap = RepositoryPrenotazioni.estraiDatiPrenotazioni();
   }
 

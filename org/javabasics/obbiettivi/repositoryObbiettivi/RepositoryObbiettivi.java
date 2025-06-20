@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -14,62 +16,60 @@ import org.javabasics.obbiettivi.modelObbiettivi.Obbiettivo;
 import org.javabasics.obbiettivi.serviceObbiettivi.ServiceObbiettivi;
 
 public class RepositoryObbiettivi {
+
+  public static final Path FILE_PATH = Paths.get("org", "javabasics", "dati", "obiettivi.csv");
+
   public static Map<Integer, Obbiettivo> estraiDatiObbiettivo() {
-    File fileObbiettivi = new File(
-        "C:/Users/39328/Desktop/tutto/start_to_impact/8java/MeditActive/org/javabasics/dati/obiettivi.csv");
+    File fileObbiettivi = FILE_PATH.toFile();
 
     ServiceObbiettivi.getInstance().svuotaMappa();
 
-    if (fileObbiettivi.exists()) {
-      try (BufferedReader br = new BufferedReader(new FileReader(fileObbiettivi))) {
+    controllaEsistenzaFile(fileObbiettivi);
+    try (BufferedReader br = new BufferedReader(new FileReader(fileObbiettivi))) {
 
-        String linea;
-        linea = br.readLine(); // salta intestazione
+      String linea;
+      linea = br.readLine(); // salta intestazione
 
-        while ((linea = br.readLine()) != null) {
+      while ((linea = br.readLine()) != null) {
 
-          String[] datiObbiettivo = linea.split(";");
+        String[] datiObbiettivo = linea.split(";");
 
-          if (linea.trim().isEmpty()) {
-            continue;
-          }
-
-          if (datiObbiettivo.length < 6) {
-            System.out.println("Riga incompleta (ignorata): " + linea);
-            continue;
-          }
-
-          if (datiObbiettivo[0].trim().isEmpty()) {
-            throw new RuntimeException("Campo id vuoto :" + linea);
-          }
-
-          if (datiObbiettivo[4].trim().isEmpty()) {
-            throw new RuntimeException("Campo duarata :" + linea);
-          }
-
-          Integer id = Integer.parseInt(datiObbiettivo[0]);
-          String nome = datiObbiettivo[1];
-          String descrizione = datiObbiettivo[2];
-          String tipologia = datiObbiettivo[3];
-          Integer durata = Integer.parseInt(datiObbiettivo[4]);
-          Boolean disponibile = null;
-          if ("SI".equals(datiObbiettivo[5])) {
-            disponibile = true;
-          } else {
-            disponibile = false;
-          }
-
-          Obbiettivo obbiettivo = new Obbiettivo(id, nome, descrizione, tipologia, durata, disponibile);
-          ServiceObbiettivi.getInstance().obbiettiviMap.put(id, obbiettivo);
+        if (linea.trim().isEmpty()) {
+          continue;
         }
 
-      } catch (IOException e) {
-        System.out.println("Errore nella lettura del file: " + e.getMessage());
-        e.printStackTrace();
+        if (datiObbiettivo.length < 6) {
+          System.out.println("Riga incompleta (ignorata): " + linea);
+          continue;
+        }
+
+        if (datiObbiettivo[0].trim().isEmpty()) {
+          throw new RuntimeException("Campo id vuoto :" + linea);
+        }
+
+        if (datiObbiettivo[4].trim().isEmpty()) {
+          throw new RuntimeException("Campo duarata :" + linea);
+        }
+
+        Integer id = Integer.parseInt(datiObbiettivo[0]);
+        String nome = datiObbiettivo[1];
+        String descrizione = datiObbiettivo[2];
+        String tipologia = datiObbiettivo[3];
+        Integer durata = Integer.parseInt(datiObbiettivo[4]);
+        Boolean disponibile = null;
+        if ("SI".equals(datiObbiettivo[5])) {
+          disponibile = true;
+        } else {
+          disponibile = false;
+        }
+
+        Obbiettivo obbiettivo = new Obbiettivo(id, nome, descrizione, tipologia, durata, disponibile);
+        ServiceObbiettivi.getInstance().obbiettiviMap.put(id, obbiettivo);
       }
 
-    } else {
-      System.out.println("Il file obiettivi.csv non esiste");
+    } catch (IOException e) {
+      System.out.println("Errore nella lettura del file: " + e.getMessage());
+      e.printStackTrace();
     }
 
     return ServiceObbiettivi.getInstance().obbiettiviMap;
@@ -81,46 +81,44 @@ public class RepositoryObbiettivi {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
     String dataFormattata = sdf.format(dora);
     File fileObbiettivi = new File(
-        "C:/Users/39328/Desktop/tutto/start_to_impact/8java/MeditActive/org/javabasics/dati/obbiettivi"
+        "org/javabasics/dati/obbiettivi"
             + dataFormattata + ".csv");
 
     try {
       fileObbiettivi.createNewFile();
 
-      if (fileObbiettivi.exists()) {
+      controllaEsistenzaFile(fileObbiettivi);
 
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileObbiettivi, true))) {
+      try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileObbiettivi, true))) {
 
-          bw.write("id;nome;descrizione;tipologia;durata;disponibile");
-          bw.newLine();
+        bw.write("id;nome;descrizione;tipologia;durata;disponibile");
+        bw.newLine();
 
-          for (Obbiettivo o : ServiceObbiettivi.getInstance().obbiettiviMap.values()) {
-            if (o.isDisponibile()) {
-              bw.write(o.formatta());
-              bw.newLine();
-            }
+        for (Obbiettivo o : ServiceObbiettivi.getInstance().obbiettiviMap.values()) {
+          if (o.isDisponibile()) {
+            bw.write(o.formatta());
+            bw.newLine();
           }
-
-          System.out.println(
-              "file creato con successo: C:/Users/39328/Desktop/tutto/start_to_impact/8java/MeditActive/org/javabasics/dati/obbiettivi"
-                  + dataFormattata + ".csv");
-
         }
 
-      } else {
-        System.out.println("file non trovato");
+        System.out.println(
+            "file creato con successo: org/javabasics/dati/obbiettivi"
+                + dataFormattata + ".csv");
+
       }
+
     } catch (IOException e) {
       System.out.println("errore nella creazione del file : " + e.getMessage());
     }
   }
 
   public static void sostituisciDisponibilitaObbiettivo(Integer idObbiettivo) {
-    File fileObbiettivi = new File(
-        "C:/Users/39328/Desktop/tutto/start_to_impact/8java/MeditActive/org/javabasics/dati/obiettivi.csv");
+    File fileObbiettivi = FILE_PATH.toFile();
+    controllaEsistenzaFile(fileObbiettivi);
 
-    File fileTemp = new File(
-        "C:/Users/39328/Desktop/tutto/start_to_impact/8java/MeditActive/org/javabasics/dati/obiettivi_temp.csv");
+    Path FILE_TEMP_PATH = Paths.get("org", "javabasics", "dati", "obiettivi_temp.csv");
+
+    File fileTemp = FILE_TEMP_PATH.toFile();
 
     try (BufferedReader br = new BufferedReader(new FileReader(fileObbiettivi));
         BufferedWriter bw = new BufferedWriter(new FileWriter(fileTemp))) {
@@ -156,10 +154,10 @@ public class RepositoryObbiettivi {
         if (id == idObbiettivo) {
           if ("SI".equals(datiObbiettivo[5])) {
             datiObbiettivo[5] = "NO";
-            System.out.println("cambiata dispnibilità obbiteiivo: " + idObbiettivo);
+            System.out.println("cambiata dispnibilità obbiettivo: " + idObbiettivo);
           } else {
             datiObbiettivo[5] = "SI";
-            System.out.println("cambiata dispnibilità obbiteiivo: " + idObbiettivo);
+            System.out.println("cambiata dispnibilità obbiettivo: " + idObbiettivo);
           }
 
           linea = String.join(";", datiObbiettivo);
@@ -187,6 +185,12 @@ public class RepositoryObbiettivi {
       System.out.println("Impossibile rinominare il file temporaneo.");
     }
 
+  }
+
+  public static void controllaEsistenzaFile(File file) {
+    if (!file.exists()) {
+      throw new RuntimeException("file non trovato");
+    }
   }
 
 }

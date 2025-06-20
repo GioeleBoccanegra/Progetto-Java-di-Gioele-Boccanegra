@@ -122,13 +122,22 @@ public class MainService {
       RepositoryUtente.aggiungiUtente(nuovoUtente);
       ServiceUtente.getInstance().caricaUtenti();
 
+    } else {
+      System.out.println("Data nascita incorretta");
     }
 
   }
 
   public LocalDate verificaData(String inputData, DateTimeFormatter formatter) {
+    int annoCorrente = LocalDate.now().getYear();
+
     try {
-      return LocalDate.parse(inputData, formatter);
+      LocalDate dataNascita = LocalDate.parse(inputData, formatter);
+      if (dataNascita.getYear() < annoCorrente) {
+        return dataNascita;
+      } else {
+        return null;
+      }
 
     } catch (Exception e) {
       System.out.println("formato data non valida");
